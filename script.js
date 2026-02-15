@@ -124,15 +124,40 @@ function addWord() {
     displayWordBank();
 }
 
-
 function editWord(index) {
-    const newWord = prompt('Edit word:', wordBank[index]);
-    if (newWord) {
-        wordBank.splice(index, 1);
-        saveWordBank();
-        displayWordBank();
+    const currentWord = wordBank[index];
+    const input = prompt('Edit word:', currentWord);
+
+    if (input === null) return; // User clicked cancel
+
+    const newWord = input.trim().toUpperCase();
+
+    // ❌ Prevent blank input
+    if (!newWord) {
+        alert('Word cannot be empty.');
+        return;
     }
+
+    // ❌ Letters only
+    const wordRegex = /^[A-Z]+$/;
+    if (!wordRegex.test(newWord)) {
+        alert('Word must contain letters only (A–Z).');
+        return;
+    }
+
+    // ❌ Prevent duplicate (unless it's the same word)
+    if (wordBank.includes(newWord) && newWord !== currentWord) {
+        alert('This word already exists in the word bank.');
+        return;
+    }
+
+    // ✅ Update instead of delete
+    wordBank[index] = newWord;
+
+    saveWordBank();
+    displayWordBank();
 }
+
 
 function deleteWord(index) {
     if (confirm('Are you sure you want to delete this word?')) {
