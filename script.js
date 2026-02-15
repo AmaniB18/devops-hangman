@@ -91,16 +91,39 @@ function displayWordBank() {
         wordList.appendChild(wordItem);
     });
 }
-
 function addWord() {
     const input = document.getElementById('newWord');
     const word = input.value.trim().toUpperCase();
 
+    // ❌ Prevent blank input
+    if (!word) {
+        alert('Word cannot be empty.');
+        input.focus();
+        return;
+    }
+
+    // ❌ Letters only (optional but recommended)
+    const wordRegex = /^[A-Z]+$/;
+    if (!wordRegex.test(word)) {
+        alert('Word must contain letters only (A–Z).');
+        input.focus();
+        return;
+    }
+
+    // ❌ Prevent duplicates
+    if (wordBank.includes(word)) {
+        alert('This word already exists in the word bank.');
+        input.focus();
+        return;
+    }
+
+    // ✅ Add valid word
     wordBank.push(word);
     input.value = '';
     saveWordBank();
     displayWordBank();
 }
+
 
 function editWord(index) {
     const newWord = prompt('Edit word:', wordBank[index]);
